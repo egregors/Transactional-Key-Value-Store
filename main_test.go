@@ -3,6 +3,7 @@ package main
 import (
 	"testing"
 
+	"github.com/egregors/Transactional-Key-Value-Store/store"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -11,7 +12,7 @@ func TestTKVStoreSetAndGetAValue(t *testing.T) {
 	// > SET foo 123
 	// > GET foo
 	// 123
-	s := NewStore()
+	s := store.NewStore()
 	s.Set("foo", "123")
 	r, ok := s.Get("foo")
 	require.True(t, ok)
@@ -22,7 +23,7 @@ func TestTKVStoreDeleteAValue(t *testing.T) {
 	// > DELETE foo
 	// > GET foo
 	// key not set
-	s := NewStore()
+	s := store.NewStore()
 	s.Set("foo", "123")
 	r, ok := s.Get("foo")
 	require.True(t, ok)
@@ -40,7 +41,7 @@ func TestTKVStoreCountTheNumberOfOccurrencesOfAValue(t *testing.T) {
 	// 2
 	// > COUNT 456
 	// 1
-	s := NewStore()
+	s := store.NewStore()
 	s.Set("foo", "123")
 	s.Set("bar", "456")
 	s.Set("baz", "123")
@@ -56,7 +57,7 @@ func TestTKVStoreCommitATransaction(t *testing.T) {
 	// no transaction
 	// > GET foo
 	// 456
-	s := NewStore()
+	s := store.NewStore()
 	s.Begin()
 	s.Set("foo", "456")
 	err := s.Commit()
@@ -83,7 +84,7 @@ func TestTKVStoreRollbackATransaction(t *testing.T) {
 	// abc
 	// > COMMIT
 	// no transaction
-	s := NewStore()
+	s := store.NewStore()
 	s.Set("foo", "123")
 	s.Set("bar", "abc")
 	s.Begin()
@@ -121,7 +122,7 @@ func TestTKVStoreNestedTransactions(t *testing.T) {
 	// > ROLLBACK
 	// > GET foo
 	// 123
-	s := NewStore()
+	s := store.NewStore()
 	s.Set("foo", "123")
 	s.Begin()
 	s.Set("foo", "456")
